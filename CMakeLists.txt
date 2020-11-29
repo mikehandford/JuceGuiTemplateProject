@@ -24,7 +24,7 @@ project(GUI_APP_EXAMPLE VERSION 0.0.1)
 
 # find_package(JUCE CONFIG REQUIRED)        # If you've installed JUCE to your system
 # or
-# add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory called JUCE
+add_subdirectory(ext/juce)                  # If you've put JUCE in a subdirectory called JUCE
 
 # If your app depends the VST2 SDK, perhaps to host VST2 plugins, CMake needs to be told where
 # to find the SDK on your system. This setup should be done before calling `juce_add_gui_app`.
@@ -58,8 +58,8 @@ juce_add_gui_app(GuiAppExample
 # that will be built into the target. This is a standard CMake command.
 
 target_sources(GuiAppExample PRIVATE
-    Main.cpp
-    MainComponent.cpp)
+    Source/Main.cpp
+    Source/MainComponent.cpp)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use
