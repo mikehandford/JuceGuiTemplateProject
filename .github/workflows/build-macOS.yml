@@ -30,13 +30,13 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Configure
-        run: cmake -DCMAKE_BUILD_TYPE=$ENV{BUILD_TYPE} -G Xcode -B build
+        run: cmake -G Xcode -B build
           
       - name: Build
         working-directory: build
         run: |
-          cmake --build . --config $ENV{BUILD_TYPE} -j 4
-          message (STATUS "Build completed")
+          cmake --build . -j 4
+          message (STATUS "${{env.BUILD_TYPE}} Build completed")
 
           
           
