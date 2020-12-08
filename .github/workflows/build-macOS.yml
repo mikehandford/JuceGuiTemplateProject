@@ -30,8 +30,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Configure
-        working-directory: build
-        run: cmake -DCMAKE_BUILD_TYPE=$ENV{BUILD_TYPE} -G Xcode ..
+        run: cmake -DCMAKE_BUILD_TYPE=$ENV{BUILD_TYPE} -G Xcode -B build
           
       - name: Build
         working-directory: build
