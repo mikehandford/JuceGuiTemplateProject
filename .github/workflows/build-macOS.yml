@@ -27,29 +27,18 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
 
       - name: Configure
-        run: |
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=$ENV{BUILD_TYPE} -G Xcode .. RESULT_VARIABLE result
-              
-          if (result EQUAL 0)
-            message(STATUS "Successfully configured for Xcode")
-          else
-            message(FATAL_ERROR "Failed to configure for Xcode")
-          endif()
+        working-directory: build
+        run: cmake -DCMAKE_BUILD_TYPE=$ENV{BUILD_TYPE} -G Xcode ..
           
       - name: Build
+        working-directory: build
         run: |
-          cmake --build build RESULT_VARIABLE result
-          
-          if (result EQUAL 0)
-            message(STATUS "Successfully built")
-          else
-            message(FATAL_ERROR "Failed to build")
-          endif()
+          cmake --build . --config $ENV{BUILD_TYPE} -j 4
+          message (STATUS "Build completed")
+
           
           
 
