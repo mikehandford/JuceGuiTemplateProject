@@ -20,19 +20,27 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  # build:
+  #   # The type of runner that the job will run on
+  #   runs-on: macos-latest
+
+  #   # Steps represent a sequence of tasks that will be executed as part of the job
+  #   steps:
+  #     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+  #     - uses: actions/checkout@v2
+
+  #     - name: Configure
+  #       run: cmake -G Xcode -B build
+
+  #     - name: Build
+  #       working-directory: build
+  #       run: |
+  #         cmake --build . -j 4 --config Release --target GuiAppExample
+
+  experiment:
     runs-on: macos-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      run: |
+      echo "${{ env.BUILD_TYPE }}"
 
-      - name: Configure
-        run: cmake -G Xcode -B build
-
-      - name: Build
-        working-directory: build
-        run: |
-          cmake --build . -j 4
