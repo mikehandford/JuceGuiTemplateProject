@@ -42,5 +42,5 @@ jobs:
 
     steps:
       run: |
-      echo "${{ env.BUILD_TYPE }}"
+        echo "${{ env.BUILD_TYPE }}"
 
