@@ -41,6 +41,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      run: |
-        echo "${{ env.BUILD_TYPE }}"
+      - name: test
+        run: |
+          echo "${{ env.BUILD_TYPE }}"
 
