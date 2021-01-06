@@ -37,17 +37,13 @@ jobs:
         working-directory: build
         run: |
           cmake --build . -j 4 --config ${{ env.BUILD_TYPE }} --target ${{ env.TARGET }}
-          ls -la
-          ls -lR GuiAppExample_artefacts
+
+      - name: Tar build # Only Tar file retains file permissions
+        working-directory: build
+        run: tar -cvf ${{ env.TARGET }}.tar ${{ env.TARGET }}_artefacts/${{ env.BUILD_TYPE }}/
 
       - uses: actions/upload-artifact@v2
         with:
           name: artifacts
-          path: build/${{ env.TARGET }}_artefacts/${{ env.BUILD_TYPE }}/
+          path: build/${{ env.TARGET }}.tar
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
-
-      - name: echo
-        working-directory: build/${{ env.TARGET }}_artefacts/${{ env.BUILD_TYPE }}
-        run: |
-          echo "${{ env.BUILD_TYPE }} Files:"
-          ls -al
