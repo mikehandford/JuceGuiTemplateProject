@@ -57,7 +57,7 @@ juce_add_gui_app(GuiAppExample
 # include all your JUCE module headers; if you're happy to include module headers directly, you
 # probably don't need to call this.
 
-# juce_generate_juce_header(GuiAppExample)
+juce_generate_juce_header(GuiAppExample)
 
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources (PRIVATE is normally best practice,
@@ -99,4 +99,4 @@ target_compile_definitions(GuiAppExample PRIVATE
 
 target_link_libraries(GuiAppExample PRIVATE
     # GuiAppData            # If we'd created a binary data target, we'd link to it here
-    juce::juce_gui_extra)
+    juce::juce_gui_basics)

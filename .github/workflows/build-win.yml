@@ -1,10 +1,10 @@
 # This is a basic workflow to help you get started with Actions
 
-name: macOS
+name: win
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push or pull request events but only for the specified branch
   push:
     tags:
       - '*'
@@ -22,7 +22,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: macos-latest
+    runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -31,21 +31,18 @@ jobs:
         with:
           #token: ${{ secrets.REPO_ACCESS_TOKEN}}
           submodules: recursive
+          lfs: true
 
       - name: Configure
-        run: cmake -G Xcode -B build "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64"
+        run: cmake -G "Visual Studio 16 2019" -A Win32 -B build
 
       - name: Build
         working-directory: build
         run: |
           cmake --build . -j 4 --config ${{ env.BUILD_TYPE }} --target ${{ env.TARGET }}
 
-      - name: Tar build # Only Tar file retains file permissions
-        working-directory: build
-        run: tar -cvf ${{ env.TARGET }}.tar ${{ env.TARGET }}_artefacts/${{ env.BUILD_TYPE }}/
-
       - uses: actions/upload-artifact@v2
         with:
           name: artifacts
-          path: build/${{ env.TARGET }}.tar
+          path: build/${{ env.TARGET }}_artefacts/${{ env.BUILD_TYPE }}/
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`

@@ -1,0 +1,38 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "intelliSenseMode": "${default}",
+            "includePath": [
+                "${workspaceFolder}\\build\\GuiAppExample_artefacts\\JuceLibraryCode",
+                "${workspaceFolder}\\ext\\juce\\modules\\**",
+                "${workspaceFolder}\\Source\\**"
+            ],
+            "defines": [],
+            "forcedInclude": [
+                "${workspaceFolder}/build/GuiAppExample_artefacts/JuceLibraryCode/JuceHeader.h"
+            ],
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/VC/Tools/MSVC/14.24.28314/bin/Hostx64/x64/cl.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        },
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/build/GuiAppExample_artefacts/JuceLibraryCode/**",
+                "${workspaceFolder}/ext/juce/modules/**",
+                "${workspaceFolder}/Source/**"
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
