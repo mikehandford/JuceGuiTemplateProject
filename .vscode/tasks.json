@@ -79,11 +79,15 @@
             },
             "command": "cmake",
             "windows": {
+                "options": {
+                    "env": {
+                        "UseMultiToolTask": true,
+                        "EnforceProcessCountAcrossBuilds": true
+                    }
+                },
                 "args": [
                     "--build",
                     ".",
-                    "-j",
-                    "4",
                     "--config",
                     "Debug",
                     "--target",
