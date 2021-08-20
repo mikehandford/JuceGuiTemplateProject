@@ -6,9 +6,10 @@
     "configurations": [
         {
             "name": "Launch App (debug)",
-            "type": "cppdbg",
+            "type": "cppvsdbg",
             "program": "${workspaceRoot}/build/GuiAppExample_artefacts/Debug/GuiAppExample.exe",
             "osx": {
+                "type": "cppdbg",
                 "MIMode": "lldb",
                 "program": "${workspaceRoot}/build/GuiAppExample_artefacts/Debug/GuiAppExample.app/Contents/MacOS/GuiAppExample",
             },
@@ -18,6 +19,7 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
+            "internalConsoleOptions": "openOnSessionStart"
         }
     ]
 }
