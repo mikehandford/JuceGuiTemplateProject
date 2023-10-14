@@ -14,15 +14,28 @@ cmake_minimum_required(VERSION 3.12)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/")
 
-# The top-level CMakeLists.txt file for a project must contain a literal, direct call to the
-# `project()` command. `project()` sets up some helpful variables that describe source/binary
-# directories, and the current project version. This is a standard CMake command.
-
-project(GUI_APP_EXAMPLE VERSION 0.0.1)
 
 
 include(CheckSubmodules)
 check_submodules()
+
+# Set CURRENT_VERSION using "VERSION" file
+include (CheckVersion)
+
+# Configures universal binaries in CI
+include(JuceMacOS)
+
+# Couple tweaks that IMO should be JUCE defaults
+include(JuceDefaults)
+
+# The top-level CMakeLists.txt file for a project must contain a literal, direct call to the
+# `project()` command. `project()` sets up some helpful variables that describe source/binary
+# directories, and the current project version. This is a standard CMake command.
+
+project(GuiAppExample VERSION ${CURRENT_VERSION})
+
+
+string(TOLOWER ${PROJECT_NAME} BUNDLE_ID)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
@@ -43,13 +56,14 @@ add_subdirectory(ext/juce)                  # If you've put JUCE in a subdirecto
 # up by default. This function accepts many optional arguments. Check the readme at
 # `docs/CMake API.md` in the JUCE repo for the full list.
 
-juce_add_gui_app(GuiAppExample
+juce_add_gui_app(${PROJECT_NAME}
+    BUNDLE_ID                       com.audient.${BUNDLE_ID}
     # VERSION ...                       # Set this if the app version is different to the project version
-    # ICON_BIG ...                      # ICON_* arguments specify a path to an image file to use as an icon
+    ICON_BIG                        ${CMAKE_CURRENT_SOURCE_DIR}/assets/images/A-512.png
     # ICON_SMALL ...
     # DOCUMENT_EXTENSIONS ...           # Specify file extensions that should be associated with this app
     # COMPANY_NAME ...                  # Specify the name of the app's author
-    PRODUCT_NAME "Gui App Example")     # The name of the final executable, which can differ from the target name
+    PRODUCT_NAME ${PROJECT_NAME})       # The name of the final executable, which can differ from the target name
 
 # `juce_generate_juce_header` will create a JuceHeader.h for a given target, which will be generated
 # into your build tree. This should be included with `#include <JuceHeader.h>`. The include path for
@@ -64,9 +78,15 @@ juce_add_gui_app(GuiAppExample
 # although it doesn't really affect executable targets). Finally, we supply a list of source files
 # that will be built into the target. This is a standard CMake command.
 
-target_sources(GuiAppExample PRIVATE
+set(${PROJECT_NAME}_sources
     Source/Main.cpp
     Source/MainComponent.cpp)
+
+target_sources(${PROJECT_NAME} PRIVATE
+    ${${PROJECT_NAME}_sources})
+
+# Adds a BinaryData target for embedding assets into the binary
+include(Assets)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use
@@ -75,12 +95,22 @@ target_sources(GuiAppExample PRIVATE
 # definitions will be visible both to your code, and also the JUCE module code, so for new
 # definitions, pick unique names that are unlikely to collide! This is a standard CMake command.
 
-target_compile_definitions(GuiAppExample PRIVATE
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    JUCE_DISPLAY_SPLASH_SCREEN=0
     # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
     JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_gui_app` call
     JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_gui_app` call
-    JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:GuiAppExample,JUCE_PRODUCT_NAME>"
-    JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:GuiAppExample,JUCE_VERSION>")
+    JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:${PROJECT_NAME},JUCE_PRODUCT_NAME>"
+    JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:${PROJECT_NAME},JUCE_VERSION>")
+
+
+target_compile_features(${PROJECT_NAME} PRIVATE
+    cxx_std_17
+)
+
+
+# MacOS only: Cleans up folder and target organization on Xcode.
+include(XcodePrettify)
 
 # If your target needs extra binary assets, you can add them here. The first argument is the name of
 # a new static library target that will include all the binary resources. There is an optional
@@ -97,6 +127,6 @@ target_compile_definitions(GuiAppExample PRIVATE
 # linked automatically. If we'd generated a binary data target above, we would need to link to it
 # here too. This is a standard CMake command.
 
-target_link_libraries(GuiAppExample PRIVATE
+target_link_libraries(${PROJECT_NAME} PRIVATE
     # GuiAppData            # If we'd created a binary data target, we'd link to it here
     juce::juce_gui_extra)
